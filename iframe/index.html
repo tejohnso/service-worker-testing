@@ -1,18 +1,27 @@
 <script>
   addEventListener("load", ()=>{
-    const sharedWorker = new SharedWorker("child-path/ww.js");
+    const sharedWorker = new SharedWorker("/child-path/ww.js");
+    console.log("Shared worker loaded from iframe in child path");
+
     sharedWorker.port.onmessage = e=>{
-      if (e.data && e.data.filePath) {
-        caches.open("test-cache")
+      console.log(`File Observer - message received ${e.data}`);
+      if (!e.data) {return;}
+
+      if (e.data.msg && e.data.msg === "ready") {
+          return sharedWorker.port.postMessage({filePath: "/test-bucket-tyler/bg red.mp4"});
+      }
+
+      if (e.data.filePath) {
+        const videoElement = document.querySelector("video");
+
+        return caches.open("test-cache")
         .then(cache=>cache.match(e.data.filePath))
         .then(resp=>resp.blob())
-        .then(blob=>document.querySelector("video").src = URL.createObjectURL(blob));
+        .then(blob=>videoElement.src = URL.createObjectURL(blob))
       }
     };
-
-    sharedWorker.port.postMessage({filePath: "test-bucket-tyler/bg-red.mp4"});
   })
 </script>
 <body>
-  <video />
+  <video autoplay="true" muted="true" width="400px" height="400px"/>
 </body>

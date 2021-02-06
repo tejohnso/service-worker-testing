@@ -8,24 +8,34 @@ onconnect = connectEvent=>{
 
   fetch("test.json").then(resp=>console.log("retrieved local domain file"));
 
-  connectEvent.ports[0].onmessage = downloadAndCache(msgEvent);
+  connectEvent.ports[0].onmessage = handleMessage;
+  connectEvent.ports[0].postMessage({msg: "ready"});
 };
 
+function handleMessage(msgEvent) {
+  if (!msgEvent.data) {return;}
+
+  if (msgEvent.data.filePath) {return downloadAndCache(msgEvent);}
+}
+
 function downloadAndCache(msgEvent) {
-  if (!msgEvent.data) {return};
+  if (!msgEvent.data) {return;}
+
+  const fileObserver = msgEvent.source || msgEvent.srcElement;
 
   const {filePath} = msgEvent.data;
   if (!filePath) {return;}
+  if (filePath[0] !== "/") {return fileObserver.postMessage({error: "invalid path"});}
 
-  const [bucket, ...object] = filePath.split("/")
+  const [bucket, ...objectPathElements] = filePath.split("/").slice(1);
 
   const contentUrl = remoteFilePath.replace("BUCKET", bucket)
-  .replace("OBJECT", object.join("/"));
+  .replace("OBJECT", objectPathElements.join("/"));
 
   fetch(contentUrl).then(resp=>{
     console.log("caching content");
     caches.open("test-cache")
-    .then(cache=>cache.put([bucket, ...object].join("/"), resp))
-    .then(()=>msgEvent.source.postMessage({filePath}));
+    .then(cache=>cache.put(["", bucket, ...objectPathElements].join("/"), resp))
+    .then(()=>fileObserver.postMessage({filePath}));
   });
 }
