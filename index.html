@@ -3,7 +3,7 @@
   addEventListener("load", ()=>{
     console.log("page is fully loaded");
 
-    fetch("test-file.json")
+    fetch("test.json")
     .then(resp=>console.log(`retrieved local domain file with ${resp.status} response`));
 
     fetch("https://storage.googleapis.com/storage/v1/b/test-bucket-tyler/o/test-content.json?alt=media")
