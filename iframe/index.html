@@ -1,0 +1,18 @@
+<script>
+  addEventListener("load", ()=>{
+    const sharedWorker = new SharedWorker("child-path/ww.js");
+    sharedWorker.port.onmessage = e=>{
+      if (e.data && e.data.filePath) {
+        caches.open("test-cache")
+        .then(cache=>cache.match(e.data.filePath))
+        .then(resp=>resp.blob())
+        .then(blob=>document.querySelector("video").src = URL.createObjectURL(blob));
+      }
+    };
+
+    sharedWorker.port.postMessage({filePath: "test-bucket-tyler/bg-red.mp4"});
+  })
+</script>
+<body>
+  <video />
+</body>
