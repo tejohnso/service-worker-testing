@@ -1,7 +1,11 @@
 <script>
   navigator.serviceWorker.register("sw.js")
+  navigator.serviceWorker.register("child-path/sw.js")
+
   addEventListener("load", ()=>{
     console.log("page is fully loaded");
+
+    const sharedWorker = new SharedWorker("child-path/ww.js");
 
     fetch("test.json")
     .then(resp=>console.log(`retrieved local domain file with ${resp.status} response`));
