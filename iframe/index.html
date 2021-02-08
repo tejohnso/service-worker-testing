@@ -12,16 +12,24 @@
       }
 
       if (e.data.filePath) {
-        const videoElement = document.querySelector("video");
+        const videoContentFromSW = document.querySelector("#fromSW");
+        videoContentFromSW.src = e.data.filePath;
+
+
+        const videoContentFromCache = document.querySelector("#fromCache");
 
         return caches.open("test-cache")
         .then(cache=>cache.match(e.data.filePath))
         .then(resp=>resp.blob())
-        .then(blob=>videoElement.src = URL.createObjectURL(blob))
+        .then(blob=>videoContentFromCache.src = URL.createObjectURL(blob))
       }
     };
   })
 </script>
 <body>
-  <video autoplay="true" muted="true" width="400px" height="400px"/>
+  <p>Video url from blob conversion to object url</p>
+  <video id="fromCache" autoplay="true" muted="true" width="400px" height="250px"></video>
+
+  <p>Video with url set to watch path and intercepted by service worker</p>
+  <video id="fromSW" autoplay="true" muted="true" width="400px" height="250px"></video>
 </body>
