@@ -1,6 +1,6 @@
 <script>
   addEventListener("load", ()=>{
-    const sharedWorker = new SharedWorker("/child-path/ww.js");
+    const sharedWorker = new SharedWorker("../child-path/ww.js");
     console.log("Shared worker loaded from iframe in child path");
 
     sharedWorker.port.onmessage = e=>{
