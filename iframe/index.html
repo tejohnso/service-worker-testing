@@ -1,6 +1,7 @@
 <script>
   addEventListener("load", ()=>{
-    navigator.serviceWorker.getRegistration("/child-path/").then(reg=>{
+    navigator.serviceWorker.getRegistrations(reg=>console.log("registrations", reg));
+    navigator.serviceWorker.getRegistration("../child-path/").then(reg=>{
       const sw = reg.installing || reg.active || reg.waiting
 
       sw.postMessage({filePath: "/test-bucket-tyler/bg red.mp4"});

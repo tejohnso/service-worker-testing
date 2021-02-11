@@ -1,6 +1,6 @@
 <script>
   navigator.serviceWorker.register("sw.js")
-  navigator.serviceWorker.register("/child-path/sw.js").then(reg=>{
+  navigator.serviceWorker.register("child-path/sw.js").then(reg=>{
     document.querySelector("iframe").src = "iframe/index.html";
   });
 
