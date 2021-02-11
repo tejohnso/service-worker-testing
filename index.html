@@ -1,22 +1,13 @@
 <script>
   navigator.serviceWorker.register("sw.js")
-  navigator.serviceWorker.register("child-path/sw.js")
-
-  addEventListener("load", ()=>{
-    console.log("page is fully loaded");
-
-    const sharedWorker = new SharedWorker("child-path/ww.js");
-
-    fetch("test.json")
-    .then(resp=>console.log(`retrieved local domain file with ${resp.status} response`));
-
-    fetch("https://storage.googleapis.com/storage/v1/b/test-bucket-tyler/o/test-content.json?alt=media")
-    .then(resp=>console.log(`retrieved extermal domain file with ${resp.status} response`));
+  navigator.serviceWorker.register("/child-path/sw.js").then(reg=>{
+    document.querySelector("iframe").src = "iframe/index.html";
   });
+
 </script>
 
 <body>
   <img src="test.png" />
   <hr>
-  <iframe width="450px" height="1000px" src="iframe/index.html" />
+  <iframe width="450px" height="1000px" src="" />
 </body>
