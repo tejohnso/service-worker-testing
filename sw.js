@@ -8,10 +8,11 @@ onmessage = event=>{
 };
 
 addEventListener("fetch", event=>{
-  console.log(`main sw handling fetch of ${event.request.url} for ${event.clientId}`);
+  const pathname = new URL(event.request.url).pathname;
 
-  const url = new URL(event.request.url);
-  if (url.pathname.startsWith("/test-bucket-tyler")) {
-    event.respondWith(caches.match(url.pathname));
-  }
+  event.respondWith(
+    pathname.startsWith("/test-bucket-tyler") ? 
+      caches.match(pathname) :
+      fetch(event.request)
+  );
 })
