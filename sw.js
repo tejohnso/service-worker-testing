@@ -1,7 +1,4 @@
-addEventListener("install", event=>{
-  console.log("installing main sw");
-  event.waitUntil(caches.open("test-cache").then(cache=>cacheStorage = cache));
-});
+addEventListener("install", ()=>console.log("installing main sw"));
 
 addEventListener("activate", ()=>console.log("activated sw"));
 

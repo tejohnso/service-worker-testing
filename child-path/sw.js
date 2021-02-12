@@ -1,5 +1,3 @@
-const remoteFilePath = "https://storage.googleapis.com/storage/v1/b/BUCKET/o/OBJECT?alt=media";
-
 addEventListener("install", ()=>console.log("installed sw"));
 addEventListener("activate", ()=>console.log("activated sw"));
 
@@ -15,6 +13,7 @@ addEventListener("fetch", event=>{
 });
 
 function downloadAndCache(event) {
+  const remoteFilePath = "https://storage.googleapis.com/storage/v1/b/BUCKET/o/OBJECT?alt=media";
   const fileConsumer = event.source || event.srcElement;
 
   const {filePath} = event.data;
