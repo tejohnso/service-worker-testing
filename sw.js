@@ -1,4 +1,10 @@
-addEventListener("install", ()=>console.log("installed sw"));
+let cacheStorage;
+
+addEventListener("install", event=>{
+  console.log("installing main sw");
+  event.waitUntil(caches.open("test-cache").then(cache=>cacheStorage = cache));
+});
+
 addEventListener("activate", ()=>console.log("activated sw"));
 
 onmessage = event=>{
@@ -11,9 +17,6 @@ addEventListener("fetch", event=>{
 
   const url = new URL(event.request.url);
   if (url.pathname.startsWith("/test-bucket-tyler")) {
-    event.respondWith(
-      caches.open("test-cache")
-      .then(cache=>cache.match(url.pathname))
-    );
+    event.respondWith(cacheStorage.match(url.pathname));
   }
 })
